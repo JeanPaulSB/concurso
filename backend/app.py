@@ -17,14 +17,14 @@ socketio = SocketIO(app,cors_allowed_origins = "http://192.168.1.6:8080")
 
 
 
-api.add_resource(Register,"/juror/register")
-api.add_resource(Juror,"/jurors/<int:upb>")
-api.add_resource(Jurors,"/jurors/list")
+api.add_resource(Register,"/api/juror/register")
+api.add_resource(Juror,"/api/jurors/<int:upb>")
+api.add_resource(Jurors,"/api/jurors/list")
 api.add_resource(Login,"/api/login")
-api.add_resource(LoadParticipants,"/participants/register")
-api.add_resource(Assign,"/participants/assign")
-api.add_resource(Participants,"/participants/list")
-api.add_resource(Participant,"/participant/<participant_id>")
+api.add_resource(LoadParticipants,"/api/participants/register")
+api.add_resource(Assign,"/api/participants/assign")
+api.add_resource(Participants,"/api/participants/list")
+api.add_resource(Participant,"/api/participant/<participant_id>")
 
 @socketio.on('message')
 def handle_message(message):

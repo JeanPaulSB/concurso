@@ -18,19 +18,20 @@ class Register(Resource):
         name = request.form["name"]
         lastName = request.form["lastName"]
         email = request.form["email"]
-        #upb_id = request.form["upb_id"]
-        #password = request.form["password"]
+        upb_id = request.form["upb_id"]
+        password = request.form["password"]
 
 
         obj["name"] = name
         obj["lastName"] = lastName
         obj["email"] = email
         obj["participants"] = []
-        #obj["upb_id"] = upb_id
-        #obj["password"] = password
+        obj["upb_id"] = upb_id
+        obj["password"] = password
         
         # checking if user is already registered
         jurors = collection.find_one({'email':email})
+        print(jurors)
         if not jurors:
             # registering user
             collection.insert_one(obj)

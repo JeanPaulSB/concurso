@@ -34,7 +34,8 @@ class LoadParticipants(Resource):
                 obj["name"] = name
                 obj["lastName"] = lastName
                 obj['questions'] = []
-                obj["competing"] = True
+                obj["wrongQuestions"] = 0
+
 
                 
                 collection.insert_one(obj)

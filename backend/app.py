@@ -38,7 +38,7 @@ def handle_message(message):
 
 if __name__ == "__main__":
     print("running app...")
-    app.run(debug = True)
+    app.run(debug = True,host = "host='0.0.0.0'")
     #socketio.run(app,port = 5005)
 
 

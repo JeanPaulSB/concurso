@@ -37,7 +37,7 @@ def handle_message(message):
 
 
 if __name__ == "__main__":
-   
+    print("running app...")
     socketio.run(app,port = 5005)
 
 

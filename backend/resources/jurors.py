@@ -57,3 +57,44 @@ class Jurors(Resource):
     def get(self):
         jurors = list(collection.find({}))
         return json.loads(json_util.dumps(jurors))
+
+class Login(Resource):
+    def post(self):
+        email = request.form["email"]
+        password = request.form["password"]
+
+        juror = list(collection.find({'email':email}))
+        
+        if juror:
+            # checking if the indicated password matches the required one
+            if juror[0]["password"] == password:
+                return Response(
+                    response = json.dumps({"data":{
+                        "message":"success",
+                        "name":juror[0]["name"],
+                        "email":juror[0]["email"],
+                        "id":juror[0]["upb_id"]
+                    }}),
+                    status = 201,
+                    mimetype = "application/json"
+                )
+            else:
+                return Response(
+                    response = json.dumps({"data":{
+                        "message":"Contraseña incorrecta"
+                    }}),
+                    status = 201,
+                    mimetype = "application/json"
+                )
+
+
+        else:
+           return Response(
+            response = json.dumps({"data":{
+                "message":"Email no encontrado!"
+            }}),
+            status = 201,
+            mimetype = "application/json"
+           )
+        print(juror)
+

@@ -1,18 +1,39 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <h1>Bienvenido a nuestra aplicación! </h1>
+      <p>Nombre: {{ name }}</p>
+      <p>Email: {{ email }}</p>
+      <p>Id: {{ id }}</p>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+
+
+import {userData} from '../stores/user'
 
 export default {
+
   name: 'HomeView',
   components: {
-    HelloWorld
+
+  },
+  data(){
+    return {
+      email: "",
+      name: "",
+      lastName: "",
+      id: "",
+    }
+
+  },
+  mounted(){
+    const store = userData()
+    let user = store.getUser
+    this.email = user.email
+    this.name = user.name
+    this.id = user.id
   }
 }
 </script>

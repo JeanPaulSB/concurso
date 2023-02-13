@@ -16,6 +16,7 @@ collection = db.participants
 class LoadParticipants(Resource):
     def post(self):
         if len(request.files) > 0:
+            print("recieving file")
             # validating that the file is actually being sended
             data = request.files['file']
             extension = data.filename.split('.')[1]

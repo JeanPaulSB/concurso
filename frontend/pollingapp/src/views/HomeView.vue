@@ -4,6 +4,7 @@
       <p>Nombre: {{ name }}</p>
       <p>Email: {{ email }}</p>
       <p>Id: {{ id }}</p>
+      <button @click="pingServer()"> ping</button>
   </div>
 </template>
 
@@ -34,6 +35,12 @@ export default {
     this.email = user.email
     this.name = user.name
     this.id = user.id
+  },
+  methods:{
+    pingServer(){
+    
+      this.$socket.emit("message","benvenido al mundo de los insanos jejejej")
+    }
   }
 }
 </script>

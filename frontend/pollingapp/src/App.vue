@@ -1,3 +1,4 @@
+
 <template>
   <div id="app">
     <b-navbar toggleable="lg" type="dark" variant="info">
@@ -10,10 +11,11 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-        
-        <b-nav-item><router-link to = "/login">Ingresar</router-link></b-nav-item>
-        <b-nav-item><router-link to = "/participants">Participantes</router-link></b-nav-item>
-        <b-nav-item>Cerrar Sesión</b-nav-item>
+
+        <b-nav-item :disabled="getAuthStatus()"><router-link to = "/login">Ingresar</router-link></b-nav-item>
+        <b-nav-item><router-link to = "/register">Regístrate</router-link></b-nav-item>
+        <b-nav-item :disabled="!getAuthStatus()"><router-link to = "/participants">Participantes</router-link></b-nav-item>
+        <b-nav-item :disabled="!getAuthStatus()">Cerrar Sesión</b-nav-item>
         
 
         
@@ -25,12 +27,31 @@
 </template>
 <script>
 import {BNavbar} from 'bootstrap-vue'
+import {userData} from './stores/user'
+
+
+
+
+
+
 export default{
   components:{
     BNavbar
 
+  },
+  setup(){
+    const store = userData()
+    
+    function getAuthStatus(){
+      return store.authStatus
+    }
+
+    return{
+      getAuthStatus
+    }
   }
-}
+  }
+
 </script>
 
 <style lang="scss">

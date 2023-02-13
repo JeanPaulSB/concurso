@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import VueSocketIO from 'vue-socket.io';
 import { createPinia, PiniaVuePlugin } from 'pinia'
-
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import VueCompositionAPI from '@vue/composition-api'
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
@@ -15,7 +16,15 @@ const pinia = createPinia()
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+Vue.use(VueCompositionAPI)
 Vue.config.productionTip = false
+
+const socketio = require("socket.io-client")
+export const SocketInstance = socketio('http://127.0.0.1:5005')
+Vue.use(new VueSocketIO({
+  debug:true,
+  connection: SocketInstance
+}))
 
 new Vue({
   router,

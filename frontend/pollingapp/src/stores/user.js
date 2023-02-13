@@ -7,12 +7,15 @@ export const userData  = defineStore('user',{
         lastName:'',
         email:'',
         isAdmin: false,
+        isAuthenticated: false,
     }),
     actions:{
         loadData(obj){
             this.name = obj.name
             this.id = obj.id
             this.email = obj.email
+            this.isAuthenticated = true
+
 
         }
     },
@@ -25,6 +28,9 @@ export const userData  = defineStore('user',{
                 email: state.email,
                 isAdmin: state.isAdmin
             }
+        },
+        authStatus(state){
+            return state.isAuthenticated
         }
     }
 })

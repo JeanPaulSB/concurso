@@ -15,6 +15,7 @@
         <b-nav-item :disabled="getAuthStatus()"><router-link to = "/login">Ingresar</router-link></b-nav-item>
         <b-nav-item><router-link to = "/register">Regístrate</router-link></b-nav-item>
         <b-nav-item :disabled="!getAuthStatus()"><router-link to = "/participants">Participantes</router-link></b-nav-item>
+        <b-nav-item><router-link to = "/admin">Admin</router-link></b-nav-item>
         <b-nav-item :disabled="!getAuthStatus()">Cerrar Sesión</b-nav-item>
         
 

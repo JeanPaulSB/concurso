@@ -12,7 +12,7 @@ app = Flask(__name__)
 api = Api(app)
 app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
-socketio = SocketIO(app,cors_allowed_origins = "*")
+socketio = SocketIO(app,logger = True)
 
 
 

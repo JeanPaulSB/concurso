@@ -20,7 +20,7 @@ Vue.use(VueCompositionAPI)
 Vue.config.productionTip = false
 
 const socketio = require("socket.io-client")
-export const SocketInstance = socketio('http://127.0.0.1:5005')
+export const SocketInstance = socketio('http://137.184.131.14/')
 Vue.use(new VueSocketIO({
   debug:true,
   connection: SocketInstance

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 const apiClient = axios.create({
-    baseURL:"http://137.184.131.14/api",
+    baseURL:"http://137.184.131.14/api/",
     headers:{
         Accept: 'application/json',
         "Content-Type": "multipart/form-data",
@@ -15,13 +15,13 @@ export default{
         let form = new FormData()
         form.append('email',email)
         form.append('password',password)
-        return apiClient.post("/api/login",form)
+        return apiClient.post("/login",form)
     },
     jurorParticipants(id){
-        return apiClient.get("/api/jurors/"+id)
+        return apiClient.get("/jurors/"+id)
     },
     participant(id){
-        return apiClient.get("/api/participant/"+id)
+        return apiClient.get("/participant/"+id)
     },
     register(obj){
         let form = new FormData()
@@ -31,6 +31,6 @@ export default{
         form.append("upb_id",obj.upb_id)
         form.append("password",obj.password)
         
-        return apiClient.post("/api/juror/register",form)
+        return apiClient.post("/juror/register",form)
     }
 }

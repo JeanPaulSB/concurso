@@ -1,47 +1,104 @@
 <template>
     <div class="participants-container">
+        <b-card class = "card-deck">
+            <b-card v-for="elem in participants"
+            border-variant = "primary"
+            :header = 'elem["_id"]["$oid"]'
+            header-bg-variant = "primary"
+            header-text-variant = "white"
+            align = "center"
+            class = "mt-5" 
+            
+            >
+            <b-card-text>Nombre: {{ elem["name"] }} {{ elem["lastName"] }}</br>
+            Respuestas incorrectas: {{ elem["questions_failed"] }} </br>
+            <b-button class = "mt-2" variant = "danger" @click="downvote(elem['_id']['$oid'])">❌</b-button>
+            
+            </b-card-text>
+                
+            </b-card>
+        </b-card>
     
-    <b-card class = "w-25 mt-2" v-for = "elem in participants" bg-variant = "dark" text-variant = "white" :title="elem.name">
-        <b-card-text>{{ elem.name }} {{ elem.lastName }}</b-card-text>
-        
-    
-        
-        <b-card-text><a :href ="'http://127.0.0.1:5000/participant/'+elem['$oid']">{{elem["$oid"]}}</a></b-card-text>
-    </b-card>
-    
-</div>
+    </div>
 </template>
 <script>
 
 import LoginService  from '@/services/LoginService';
 import {userData} from '../stores/user'
-import {BCard,BCardText} from 'bootstrap-vue'
+import {BCard,BCardText,BTable,BButton,BCardGroup,BBadge,BToast} from 'bootstrap-vue'
+
 export default{
     name: "Participants",
     components:{
         BCard,
-        BCardText
+        BCardText,
+        BTable,
+        BButton,
+        BCardGroup,
+        BBadge,
+        BToast,
     },
     data(){
         return {
             ids: [],
             participants: [],
+            fields: ["name","questions_failed","downgrade"]
 
         }
     },
     mounted(){
         let store = userData()
-        console.log("we are loading your participants, just wait...")
-        LoginService.jurorParticipants(store.getUser.id).then(response => {
-            this.ids = response.data[0]['participants']
-            console.log(this.ids)
-            for(let i = 0; i<this.ids.length;i++){
-                LoginService.participant(this.ids[i]["$oid"]).then(response =>{
-                    this.participants.push(response.data)
-                })
-            }
-        })
 
+        if(store.isAuthenticated){
+            let user = store.getUser
+            this.$socket.emit('join',{'room':user.id})
+        }
+        else{
+            this.$router.push("/login")
+        }
+        },
+        methods:{
+            downvote(id){
+                let store = userData()
+                let user = store.getUser
+
+                const participant = this.participants.filter( user => user['_id']['$oid'] == id)[0]
+                
+                const date = new Date()
+                
+                let obj = {
+                    'juror':user.id,
+                    'participant_id':id,
+                    'participant_name': participant.name,
+                    'participant_lastName': participant.lastName,
+                    'time':date.toString()
+                }
+
+                this.$socket.emit("downvote",obj)
+                
+               
+                
+                this.$bvToast.toast(`Acabas de calificar la respuesta de ${participant.name} ${participant.lastName} como incorrecta!`,{
+                    title: 'Notificación',
+                    variant: 'danger',
+                    solid: true,
+                })
+                
+                
+            }
+        },
+        sockets:{
+            participants(data){
+                console.log(data)
+                this.participants = data
+            }
+
+        },
+        beforeDestroy(){
+            let store = userData()
+            let user = store.getUser
+
+            this.$socket.emit("leave",{'room':user.id})
         }
 
 
@@ -52,9 +109,14 @@ export default{
 .participants-container{
     display:flex;
     width: 100vw;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 50px;
 }
+.individual-participant{
+    display: flex;
+    gap: 50px;
+}
+
+
 </style>

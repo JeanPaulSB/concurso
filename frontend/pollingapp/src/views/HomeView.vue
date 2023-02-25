@@ -4,8 +4,8 @@
       <p>Nombre: {{ name }}</p>
       <p>Email: {{ email }}</p>
       <p>Id: {{ id }}</p>
-      <button @click="pingServer()"> ping</button>
   </div>
+  
 </template>
 
 <script>
@@ -26,20 +26,28 @@ export default {
       name: "",
       lastName: "",
       id: "",
+      data: "",
     }
 
   },
   mounted(){
     const store = userData()
     let user = store.getUser
-    this.email = user.email
-    this.name = user.name
-    this.id = user.id
-  },
-  methods:{
-    pingServer(){
+
+    if (store.isAuthenticated){
+      this.email = user.email
+      this.name = user.name
+      this.id = user.id
+      
+    }
+    else{
+      this.$router.push("/login")
+    }
     
-      this.$socket.emit("message","benvenido al mundo de los insanos jejejej")
+  },
+  sockets:{
+    logged(data){
+      this.data = data
     }
   }
 }

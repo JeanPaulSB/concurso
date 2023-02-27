@@ -4,6 +4,8 @@ from flask_cors import CORS
 from flask_socketio import SocketIO,send,emit,join_room,leave_room
 from bson import ObjectId,json_util
 from threading import Lock
+
+
 # importing resources
 from resources.jurors import Register,Juror,Jurors,Login
 from resources.participants import LoadParticipants,Assign,Participants,Participant
@@ -11,6 +13,8 @@ from database.db import client
 from database.utils import getParticipants,downvoteParticipant,recordTransaction
 
 import json
+import logging
+
 
 app = Flask(__name__)
 api = Api(app)

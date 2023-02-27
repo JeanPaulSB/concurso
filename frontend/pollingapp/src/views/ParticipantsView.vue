@@ -50,6 +50,7 @@ export default{
         // getting active participants
         activeParticipants(){
             this.participants.filter((obj) => obj.questions_failed < 3)
+            console.log(this.participants)
         }
     },
     mounted(){

@@ -1,7 +1,7 @@
 <template>
     <div class="participants-container">
-        <b-card class = "card-deck">
-            <b-card v-for="elem in participants"
+        <b-card>
+            <b-card v-for="elem in activeParticipants"
             border-variant = "primary"
             :header = 'elem["_id"]["$oid"]'
             header-bg-variant = "primary"
@@ -44,6 +44,12 @@ export default{
             participants: [],
             fields: ["name","questions_failed","downgrade"]
 
+        }
+    },
+    computed: {
+        // getting active participants
+        activeParticipants(){
+            this.participants.filter((obj) => obj.questions_failed < 3)
         }
     },
     mounted(){

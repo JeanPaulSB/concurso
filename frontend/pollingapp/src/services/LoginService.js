@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 const apiClient = axios.create({
-    baseURL:"http://127.0.0.1:5000/api",
+    baseURL:"http://concursoupb.com/api",
     headers:{
         Accept: 'application/json',
         "Content-Type": "multipart/form-data",

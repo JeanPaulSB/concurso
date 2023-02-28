@@ -23,7 +23,7 @@ app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
 
 
-socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "gevent",cors_allowed_origins = ['*'])
+socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "gevent",cors_allowed_origins = "*")
 
 # creating thread
 thread = None

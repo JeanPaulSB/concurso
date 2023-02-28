@@ -112,3 +112,15 @@ class Revert(Resource):
         participant_id = request.form["participant_id"]
         revertDowngrade(participant_id)
         return 201
+
+class JurorsParticipants(Resource):
+    def get(self):
+        jurors = list(collection.find({}))
+        
+        for juror in jurors:
+            print(juror.keys())
+            juror_id = juror['upb_id']
+            result = getParticipants(juror_id)
+            juror['participants'] = result
+            
+        return json.loads(json_util.dumps(jurors))

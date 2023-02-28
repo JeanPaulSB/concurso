@@ -26,7 +26,7 @@ Function intended to mark a particpant's answer as wrong
 """
 def downvoteParticipant(participant_id: str) -> list:
     collection = db.participants
-
+    print(participant_id)
     # getting participant
     participant = collection.find_one({'_id':ObjectId(participant_id)})
 
@@ -41,6 +41,8 @@ def downvoteParticipant(participant_id: str) -> list:
 def revertDowngrade(participant_id: str):
     collection = db.participants
 
+    participant_id = str(participant_id)
+    print(participant_id)
     # getting participant
     participant = collection.find_one({'_id':ObjectId(participant_id)})
 
@@ -54,3 +56,11 @@ def revertDowngrade(participant_id: str):
 def recordTransaction(data: dict):
     collection = db.history
     collection.insert_one(data)
+
+"""
+Function that returns all the transactions from a user
+"""
+def getHistory(juror_id: int) -> list:
+    collection = db.history
+    records = list(collection.find({'juror':juror_id}))
+    return records

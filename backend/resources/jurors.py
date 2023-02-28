@@ -1,6 +1,7 @@
 from flask import Response,request,jsonify
 from flask_restful import Resource
 from database.db import client
+from database.utils import *
 from bson import json_util, ObjectId
 
 import json
@@ -99,3 +100,15 @@ class Login(Resource):
            )
         print(juror)
 
+class History(Resource):
+    def post(self):
+        # TODO: add exceptions
+        upb_id = int(request.form["upb_id"])
+        records = getHistory(upb_id)
+        return json.loads(json_util.dumps(records))
+
+class Revert(Resource):
+    def post(self):
+        participant_id = request.form["participant_id"]
+        revertDowngrade(participant_id)
+        return 201

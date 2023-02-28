@@ -20,7 +20,7 @@ app = Flask(__name__)
 api = Api(app)
 app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
-socketio = SocketIO(app,logger = True,cors_allowed_origins = '*')
+socketio = SocketIO(app,logger = True,cors_allowed_origins = '*',engineio_logger = True, async_mode = "gevent")
 
 # creating thread
 thread = None

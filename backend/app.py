@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO,send,emit,join_room,leave_room
 from bson import ObjectId,json_util
 from threading import Lock
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 # importing resources
@@ -20,7 +21,9 @@ app = Flask(__name__)
 api = Api(app)
 app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
-socketio = SocketIO(app,logger = True,cors_allowed_origins = '*',engineio_logger = True, async_mode = "gevent")
+
+app.wsgi_app = ProxyFix(app.wsgi_app,x_for=1,x_proto=1)
+socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "gevent")
 
 # creating thread
 thread = None

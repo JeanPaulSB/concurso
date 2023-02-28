@@ -8,6 +8,7 @@ export const userData  = defineStore('user',{
         email:'',
         isAdmin: false,
         isAuthenticated: false,
+        round: 0,
     }),
     actions:{
         loadData(obj){
@@ -15,8 +16,16 @@ export const userData  = defineStore('user',{
             this.id = obj.id
             this.email = obj.email
             this.isAuthenticated = true
-
-
+        },
+        increaseRound(){
+            this.round+=1;
+        },
+        decreaseRound(){
+            
+            if(this.round > 0){
+             this.round--;
+            }
+            
         }
     },
     getters:{
@@ -31,6 +40,9 @@ export const userData  = defineStore('user',{
         },
         authStatus(state){
             return state.isAuthenticated
+        },
+        getRound(state){
+            return state.round
         }
     }
 })

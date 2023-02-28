@@ -1,7 +1,9 @@
 <template>
     <div class="participants-container">
+        <h1>Participantes activos</h1>
+        <b-badge pill variant = "success">Ronda {{round}}</b-badge>
         <b-card>
-            <b-card v-for="elem in activeParticipants"
+            <b-card v-for="elem in this.activeParticipants"
             border-variant = "primary"
             :header = 'elem["_id"]["$oid"]'
             header-bg-variant = "primary"
@@ -18,6 +20,26 @@
                 
             </b-card>
         </b-card>
+
+        <h2>Participantes descalificados</h2>
+
+          <b-card>
+            <b-card v-for="elem in this.desqualifiedParticipants"
+            border-variant = "primary"
+            :header = 'elem["_id"]["$oid"]'
+            header-bg-variant = "primary"
+            header-text-variant = "white"
+            align = "center"
+            class = "mt-5" 
+            
+            >
+            <b-card-text>Nombre: {{ elem["name"] }} {{ elem["lastName"] }}</br>
+            Respuestas incorrectas: {{ elem["questions_failed"] }} </br>
+            
+            </b-card-text>
+                
+            </b-card>
+        </b-card>
     
     </div>
 </template>
@@ -26,7 +48,7 @@
 import LoginService  from '@/services/LoginService';
 import {userData} from '../stores/user'
 import {BCard,BCardText,BTable,BButton,BCardGroup,BBadge,BToast} from 'bootstrap-vue'
-
+import {mapState} from 'pinia'
 export default{
     name: "Participants",
     components:{
@@ -49,9 +71,14 @@ export default{
     computed: {
         // getting active participants
         activeParticipants(){
-            this.participants.filter((obj) => obj.questions_failed < 3)
-            console.log(this.participants)
-        }
+            return this.participants.filter( obj => obj.questions_failed < 3)
+            
+        },
+        desqualifiedParticipants(){
+            return this.participants.filter(obj => obj.questions_failed >= 3)
+        },
+        ...mapState(userData,['round'])
+
     },
     mounted(){
         let store = userData()
@@ -116,6 +143,8 @@ export default{
 .participants-container{
     display:flex;
     width: 100vw;
+    flex-direction: column;
+    gap: 50px;
     justify-content: center;
     align-items: center;
     margin-top: 50px;

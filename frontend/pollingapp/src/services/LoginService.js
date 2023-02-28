@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 const apiClient = axios.create({
-    baseURL:"https://concursoupb.com/api",
+    baseURL:"http://192.168.1.7:5000/api",
     headers:{
         Accept: 'application/json',
         "Content-Type": "multipart/form-data",
@@ -32,5 +32,24 @@ export default{
         form.append("password",obj.password)
         
         return apiClient.post("/juror/register",form)
+    },
+    history(id){
+        let form = new FormData()
+        form.append('upb_id',id)
+        return apiClient.post("/jurors/history",form)
+    },
+    revert(id){
+        let form = new FormData();
+        form.append('participant_id',id)
+        return apiClient.post("/jurors/revert",form)
+    },
+    assign(){
+        return apiClient.get("/participants/assign")
+    },
+    jurors(){
+        return apiClient.get("/jurors/list")
+    },
+    jurorsParticipants(){
+        return apiClient.get("/jurors/participants_normalized")
     }
 }

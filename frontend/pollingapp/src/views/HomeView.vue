@@ -1,9 +1,19 @@
 <template>
   <div class="home">
-      <h1>Bienvenido a nuestra aplicación! </h1>
-      <p>Nombre: {{ name }}</p>
-      <p>Email: {{ email }}</p>
-      <p>Id: {{ id }}</p>
+      
+      <h2>Historial de votaciones</h2>
+      <b-card class = "w-50" v-for = "record in history" bg-variant = "warning">
+        <b-card-text>
+          Time: {{record.time}}
+
+        </b-card-text>
+        <b-card-text>
+        Participante: {{ record.participant_name }} {{ record.participant_lastName }}
+      </b-card-text>
+      <b-button variant = "success" @click = 'revert(record["participant_id"])'>Revertir </b-button>
+      </b-card>
+
+
   </div>
   
 </template>
@@ -13,11 +23,16 @@
 
 
 import {userData} from '../stores/user'
+import LoginService from '@/services/LoginService.js'
+import {BTable,BCard,BButton,BToast} from 'bootstrap-vue' 
 
 export default {
 
   name: 'HomeView',
   components: {
+    BTable,
+    BCard,
+    BButton,
 
   },
   data(){
@@ -27,6 +42,7 @@ export default {
       lastName: "",
       id: "",
       data: "",
+      history: [],
     }
 
   },
@@ -39,12 +55,38 @@ export default {
       this.name = user.name
       this.id = user.id
       
+      LoginService.history(this.id).then( response => {
+        this.history = response.data.reverse()
+        console.log(this.history)
+      })
+      
+      
     }
+
+
+
     else{
       this.$router.push("/login")
     }
     
   },
+  methods:{
+    revert(id){
+      this.$bvToast.toast(`Acabas de revertir una calificación!`,{
+                    title: 'Notificación',
+                    variant: 'success',
+                    solid: true,
+                })
+      console.log("reverting")
+      console.log(id)
+      LoginService.revert(id).then(response => {
+        console.log("reverted!")
+      })
+
+
+    }
+  },
+
   sockets:{
     logged(data){
       this.data = data
@@ -52,3 +94,11 @@ export default {
   }
 }
 </script>
+<style>
+.home{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>

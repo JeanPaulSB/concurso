@@ -22,8 +22,8 @@ api = Api(app)
 app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
 
-app.wsgi_app = ProxyFix(app.wsgi_app,x_for=1,x_proto=1)
-socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "gevent")
+
+socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "gevent",cors_allowed_origins = ['*'])
 
 # creating thread
 thread = None

@@ -27,6 +27,7 @@ Vue.use(new VueSocketIO({
   connection: SocketInstance
 }))
 
+
 new Vue({
   router,
   pinia,

@@ -75,7 +75,8 @@ class Login(Resource):
                         "message":"success",
                         "name":juror[0]["name"],
                         "email":juror[0]["email"],
-                        "id":juror[0]["upb_id"]
+                        "id":juror[0]["upb_id"],
+                        "isAdmin":juror[0]['isAdmin']
                     }}),
                     status = 201,
                     mimetype = "application/json"

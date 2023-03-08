@@ -28,12 +28,16 @@ class LoadParticipants(Resource):
             excel_file = pd.read_excel(data)
             # traversing excel sheet records
             for index,row in excel_file.iterrows():
+
+                # fields that we need to register [ID,Nombre,ID (Incluyendo los ceros),Seleccione la seccional de la Universidad en la que actualmente estudia]
                 obj = {}
-                name = row['name']
-                lastName = row['lastName']
-                
+                name = row['Nombre']
+                upb_id = row['ID (Incluyendo los ceros)']
+                row_id = row['ID']
+                seccional = ['Seleccione la seccional de la Universidad en la que actualmente estudia']
                 obj["name"] = name
-                obj["lastName"] = lastName
+                obj['row_id'] = row_id
+                obj['seccional'] = seccional
                 obj['questions'] = []
                 obj["wrongQuestions"] = 0
 

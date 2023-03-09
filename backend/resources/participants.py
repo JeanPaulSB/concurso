@@ -25,28 +25,46 @@ class LoadParticipants(Resource):
             if not extension in ['xlsx','xlsm']:
                 return 404
             
-            excel_file = pd.read_excel(data)
-            # traversing excel sheet records
-            for index,row in excel_file.iterrows():
+            try:
+                excel_file = pd.read_excel(data)
+                # traversing excel sheet records
+                count = 0
+                for index,row in excel_file.iterrows():
 
-                # fields that we need to register [ID,Nombre,ID (Incluyendo los ceros),Seleccione la seccional de la Universidad en la que actualmente estudia]
-                obj = {}
-                name = row['Nombre']
-                upb_id = row['ID (Incluyendo los ceros)']
-                row_id = row['ID']
-                seccional = ['Seleccione la seccional de la Universidad en la que actualmente estudia']
-                obj["name"] = name
-                obj['row_id'] = row_id
-                obj['seccional'] = seccional
-                obj['questions'] = []
-                obj["wrongQuestions"] = 0
+                    # fields that we need to register [ID,Nombre,ID (Incluyendo los ceros),Seleccione la seccional de la Universidad en la que actualmente estudia]
+                    obj = {}
+                    name = row['Nombre']
+                    upb_id = row['ID (Incluyendo los ceros)']
+                    row_id = row['ID']
+                    seccional = row['Seleccione la seccional de la Universidad en la que actualmente estudia']
 
+                    obj["name"] = name
+                    obj['row_id'] = row_id
+                    obj['seccional'] = seccional
+                    obj['questions'] = []
+                    obj["wrongQuestions"] = 0
+                    obj["upb_id"] = upb_id
 
-                
-                collection.insert_one(obj)
-                
-            print("file sended, nice")
-        return 200
+                    count = index
+
+                    
+                    collection.insert_one(obj)
+                    
+                print("file sended, nice")
+                return Response(
+                    response = json.dumps({"data" : {
+                        "message": "success",
+                        "registered_users": count
+                    }}),
+                    status = 201,
+                    mimetype = "application/json"
+                )
+            except Exception as e:
+                print(str(e))
+                return Response(json.dumps({"data":{
+                    "message":"something went wrong"
+                }}),status = 404, mimetype = "application/json")
+            
 
 class Assign(Resource):
     def get(self):

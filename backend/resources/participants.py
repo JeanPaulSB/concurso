@@ -68,14 +68,16 @@ class LoadParticipants(Resource):
 
 class Assign(Resource):
     def get(self):
+
+        # NOTE: MEDELLIN SECCIONAL
         # getting participants ids
-        participants = [elem['_id'] for elem in list(collection.find({}))]
+        participants = [elem['_id'] for elem in list(collection.find({'seccional':'Medellín'}))]
         # accessing jurors db and getting all the participants as 2d array with chunks of 3 elements
         jurors = db.jurors
         participants = list(chunks(participants,3))
         
         # listing  jurors
-        jurors_list = list(jurors.find({}))
+        jurors_list = list(jurors.find({'seccional':'Medellín'}))
         for juror in jurors_list:
             # getting random chunk from the main list of participants
             # and assigning it to a juror
@@ -87,6 +89,9 @@ class Assign(Resource):
                 jurors.update_one({'_id':juror_id},{"$set":{"participants":participants_choice}})
                 # removing participant from the main list since it was alreayd selected
                 participants.remove(participants_choice)
+
+        # NOTE: BUCARAMANGA SECCIONAL
+        
 
 class Participants(Resource):
     def get(self):

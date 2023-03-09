@@ -11,6 +11,7 @@ import json
 import pandas as pd
 import numpy as np
 import os
+import io
 
 db = client.Users
 collection = db.participants
@@ -137,13 +138,16 @@ class GenerateReport(Resource):
 
         try: 
             os.remove('resultados.xlsx')
+
             result.to_excel('resultados.xlsx')
             content = ""
             with open('resultados.xlsx','rb') as excel_file:
                 content = excel_file.read()
-                return content
-        except:
-            return 0
+                return send_file(io.BytesIO(content),
+                download_name = "resultados.xlsx",
+                as_attachment = True)
+        except Exception as e:
+            return str(e)
             
 
 

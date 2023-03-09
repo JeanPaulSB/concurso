@@ -137,4 +137,5 @@ class GenerateReport(Resource):
             juror['participants'] = result
             
         query = json.loads(json_util.dumps(jurors))
-        return pd.json_normalize(query,max_level = 2)
+        print(query)
+        return "ok"

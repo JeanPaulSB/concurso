@@ -136,7 +136,7 @@ class GenerateReport(Resource):
 
         result.to_excel('resultados.xlsx')
 
-        return send_file("resultados.xlsx")
+        return send_file(filename = "resultados.resultados.xlsx")
 
 
 """

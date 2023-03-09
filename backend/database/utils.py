@@ -30,11 +30,11 @@ def downvoteParticipant(participant_id: str) -> list:
     # getting participant
     participant = collection.find_one({'_id':ObjectId(participant_id)})
 
-    questions_failed = participant['questions_failed']
+    questions_failed = participant['wrongQuestions']
     questions_failed += 1
 
     # updating record
-    collection.update_one({'_id':ObjectId(participant_id)},{"$set":{"questions_failed": questions_failed}})
+    collection.update_one({'_id':ObjectId(participant_id)},{"$set":{"wrongQuestions": questions_failed}})
 
 
 

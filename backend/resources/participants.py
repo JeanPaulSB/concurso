@@ -54,7 +54,7 @@ class LoadParticipants(Resource):
                 return Response(
                     response = json.dumps({"data" : {
                         "message": "success",
-                        "registered_users": count
+                        "registered_users": count+1
                     }}),
                     status = 201,
                     mimetype = "application/json"

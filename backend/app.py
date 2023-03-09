@@ -58,6 +58,19 @@ def background_thread():
             print(f"getting participants for {room}")
             socketio.emit('participants',participants,to = room)
 
+def admin_background_thread():
+    while True:
+        socketio.sleep(2)
+        collection = db.participants
+        participants = list(collection.find({}))
+        socketio.emit('results',participants)
+
+@socketio.on('admin')
+def admin():
+    global thread1
+    with thread_lock:
+        if thread1 is None:
+            thread1 = socketio.start_background_task(admin_background_thread()) 
 
 
 

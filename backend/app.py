@@ -8,8 +8,8 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 # importing resources
-from resources.jurors import Register,Juror,Jurors,Login,History,Revert,JurorsParticipants,GenerateReport
-from resources.participants import LoadParticipants,Assign,Participants,Participant
+from resources.jurors import Register,Juror,Jurors,Login,History,Revert,JurorsParticipants
+from resources.participants import LoadParticipants,Assign,Participants,Participant,GenerateReport
 from database.db import client
 from database.utils import getParticipants,downvoteParticipant,recordTransaction
 

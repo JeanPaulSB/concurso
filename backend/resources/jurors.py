@@ -126,16 +126,3 @@ class JurorsParticipants(Resource):
             
         return json.loads(json_util.dumps(jurors))
 
-
-class GenerateReport(Resource):
-    def get(self):
-        jurors = list(collection.find({}))
-        for juror in jurors:
-            print(juror.keys())
-            juror_id = juror['upb_id']
-            result = getParticipants(juror_id)
-            juror['participants'] = result
-            
-        query = json.loads(json_util.dumps(jurors))
-        print(query)
-        return "ok"

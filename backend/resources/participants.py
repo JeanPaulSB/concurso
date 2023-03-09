@@ -1,8 +1,8 @@
-from flask import Response,request,jsonify
+from flask import Response,request,jsonify,send_from_directory
 from flask_restful import Resource
 from database.db import client
 from bson import json_util, ObjectId
-
+from database.utils import getJuror
 
 
 
@@ -41,7 +41,6 @@ class LoadParticipants(Resource):
                     obj["name"] = name
                     obj['row_id'] = row_id
                     obj['seccional'] = seccional
-                    obj['questions'] = []
                     obj["wrongQuestions"] = 0
                     obj["upb_id"] = upb_id
 
@@ -91,7 +90,7 @@ class Assign(Resource):
                 participants.remove(participants_choice)
 
         # NOTE: BUCARAMANGA SECCIONAL
-        
+
 
 class Participants(Resource):
     def get(self):
@@ -107,6 +106,37 @@ class Participant(Resource):
         return "bad"
        
 
+
+class GenerateReport(Resource):
+    def get(self):
+        participants = list(collection.find({}))
+        new_participants = []
+        jurors_collection = db.jurors
+
+        for participant in participants:
+            p_id = participant['_id']
+            juror = getJuror(p_id)
+
+    
+            name = juror["name"]  if juror else None
+            email = juror["email"]  if juror else None
+            seccional = juror["seccional"] if juror else None
+            upb_id = juror["upb_id"] if juror else None
+                
+            participant['juror_name'] = name
+            participant['juror_email'] = email
+            participant['juror_seccional'] = seccional
+            participant['juror_upbid'] = upb_id
+                
+                
+            
+            new_participants.append(participant)
+
+        result = pd.json_normalize(json.loads(json_util.dumps(new_participants)),max_level = 2)
+
+        result.to_excel('resultados.xlsx')
+
+        return send_from_directory("","resultados.xlsx",as_attachment = True)
 
 
 """

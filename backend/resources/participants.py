@@ -140,7 +140,7 @@ class GenerateReport(Resource):
         except:
             result.to_excel('resultados.xlsx')
 
-            return send_file(filename = "resultados.xlsx")
+            return send_file("resultados.xlsx")
 
 
 """

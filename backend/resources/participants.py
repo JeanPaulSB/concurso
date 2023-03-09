@@ -143,7 +143,7 @@ class GenerateReport(Resource):
             with open('resultados.xlsx','rb') as excel_file:
                 content = excel_file.read()
 
-            return 
+            return content
 
 
 """

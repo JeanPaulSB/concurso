@@ -1,4 +1,4 @@
-from flask import Response,request,jsonify,send_from_directory
+from flask import Response,request,jsonify,send_from_directory,send_file
 from flask_restful import Resource
 from database.db import client
 from bson import json_util, ObjectId
@@ -136,7 +136,7 @@ class GenerateReport(Resource):
 
         result.to_excel('resultados.xlsx')
 
-        return send_from_directory("","resultados.xlsx",as_attachment = True)
+        return send_file("resultados.xlsx")
 
 
 """

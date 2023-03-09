@@ -137,12 +137,14 @@ class GenerateReport(Resource):
 
         try: 
             os.remove('resultados.xlsx')
-        except:
             result.to_excel('resultados.xlsx')
             content = ""
             with open('resultados.xlsx','rb') as excel_file:
                 content = excel_file.read()
                 return content
+        except:
+            return 0
+            
 
 
 """

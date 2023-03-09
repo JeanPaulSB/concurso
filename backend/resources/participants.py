@@ -10,6 +10,7 @@ import random
 import json
 import pandas as pd
 import numpy as np
+import os
 
 db = client.Users
 collection = db.participants
@@ -134,9 +135,12 @@ class GenerateReport(Resource):
 
         result = pd.json_normalize(json.loads(json_util.dumps(new_participants)),max_level = 2)
 
-        result.to_excel('resultados.xlsx')
+        try: 
+            os.remove('resultados.xlsx')
+        except:
+            result.to_excel('resultados.xlsx')
 
-        return send_file(filename = "resultados.resultados.xlsx")
+            return send_file(filename = "resultados.xlsx")
 
 
 """

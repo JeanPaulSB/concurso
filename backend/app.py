@@ -65,7 +65,7 @@ def admin_background_thread():
     while True:
         socketio.sleep(2)
         collection = db.participants
-        participants = list(collection.find({}))
+        participants = json.loadas(json_util.dumps(list(collection.find({}))))
         socketio.emit('results',participants)
 
 @socketio.on('admin')

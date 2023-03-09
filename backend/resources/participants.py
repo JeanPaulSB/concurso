@@ -139,8 +139,11 @@ class GenerateReport(Resource):
             os.remove('resultados.xlsx')
         except:
             result.to_excel('resultados.xlsx')
+            content = ""
+            with open('resultados.xlsx','rb') as excel_file:
+                content = excel_file.read()
 
-            return send_from_directory("","resultados.xlsx",as_attachment = True)
+            return 
 
 
 """

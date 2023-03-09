@@ -29,6 +29,9 @@ socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "geve
 thread = None
 thread_lock = Lock()
 
+thread1 = None
+thread1_lock = Lock()
+
 # accessing our db
 db = client.Users
     
@@ -68,7 +71,7 @@ def admin_background_thread():
 @socketio.on('admin')
 def admin():
     global thread1
-    with thread_lock:
+    with thread1_lock:
         if thread1 is None:
             thread1 = socketio.start_background_task(admin_background_thread()) 
 

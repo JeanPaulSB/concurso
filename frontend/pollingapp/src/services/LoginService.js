@@ -23,6 +23,9 @@ export default{
     participant(id){
         return apiClient.get("/participant/"+id)
     },
+    participantsList(){
+        return apiClient.get("/participants/list")
+    },
     register(obj){
         let form = new FormData()
         form.append("name",obj.name)
@@ -51,5 +54,20 @@ export default{
     },
     jurorsParticipants(){
         return apiClient.get("/jurors/participants_normalized")
+    },
+    sendFile(file){
+        let form = new FormData();
+        form.append("file",file)
+        return apiClient.post("/participants/register",form)
+
+    },
+    getReport(){
+        return apiClient.get("/report")
+    },
+    getJuror(participant_id){
+        let form = new FormData();
+        form.append('participant_id',participant_id)
+        return apiClient.post("/jurors/participant",form)
+        
     }
 }

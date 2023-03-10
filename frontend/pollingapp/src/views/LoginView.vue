@@ -1,32 +1,45 @@
 <template>
-    <div class = "form-container">
-        <b-form @submit = "onSubmit" class = "mt-3">
-            <b-form-group
-            label = "Email">
-            
-            <b-form-input
-            placeholder = "Ingresa tu email"
-            required
+        <v-card class = " loading-info grey lighten-5 mx-auto mt-10 w-75 px-6 py-8">
+        <v-form @submit.prevent = "onSubmit" v-model = "form" >
+            <v-text-field
             v-model = "email"
-            type = "email"
+            :readonly="loading"
+            :rules="emailRule"
+            class ="mb-2"
+            clearable
+            label = "Email"
+            prepend-icon = "mdi-email"
             >
-            </b-form-input>
-            </b-form-group>
-            <b-form-group
-            label = "Contraseña">
-            <b-form-input
+            </v-text-field>
+            <v-text-field
+            v-model="password"
+            :readonly="loading"
+            :rules="passwordRule"
+            clearable
             type = "password"
-            v-model = "password"
-            placeholder = "Ingresa tu contraseña"
-            required
-            >
-            </b-form-input>
-            </b-form-group>
-            <b-button type = "submit" variant = "success">Ingresar</b-button>
-        </b-form>
-        <b-alert :show="alert" variant="danger" class = "mt-5">{{ message }}</b-alert>
-
-    </div>
+            prepend-icon = "mdi-lock"
+            label="Password"
+            placeholder="Enter your password"
+            ></v-text-field>
+            <br>
+            <v-btn
+            color = "success"
+            size = "large"
+            type = "submit"
+            variant = "elevated"
+            
+            :loading="loading">
+            Ingresar</v-btn>
+        </v-form>
+        <v-alert
+        prominent
+        v-if = "this.alert == true"
+        type = "error"
+        dense
+        class = "mt-4"
+        >{{message}}</v-alert>
+    </v-card>
+   
 </template>
 <script>
 import { BForm,BFormInput,BFormGroup,BButton,BAlert} from 'bootstrap-vue';
@@ -49,6 +62,11 @@ export default{
             password:"",
             alert: false,
             message: "",
+            emailRule: [ value => { if(value) return true
+                return "Ingresa un email"}],
+            passwordRule: [ value => {if(value) return true
+            return "Ingresa tu contraseña"},
+            ]
         }
     },
     methods:{
@@ -57,6 +75,7 @@ export default{
             // making api call to our backend
             LoginService.login(this.email,this.password).then(response =>{
                 let data = response.data.data
+                console.log(data)
                 let msg = data["message"]
                 console.log(data)
                 if(msg != "success"){
@@ -73,7 +92,7 @@ export default{
 
                 
             })
-            console.log("hola jeejej")
+            
         }
     }
 

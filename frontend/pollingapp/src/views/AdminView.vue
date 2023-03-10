@@ -1,22 +1,84 @@
 <template>
-    <div class ="admin-div">
-    <h1>Panel de administrador</h1>
-    <div class = "round-handler">
-        <b-badge  pill variant = "primary">Ronda {{round}}</b-badge>
-        <div class = "round-buttons">
-            <b-button variant = "success" pill size="sm" @click = "nextRound">Siguiente</b-button>
-            <b-button variant = "danger" pill size="sm" @click = "decreaseRound">Revertir</b-button>
-        </div>
+    <div>
+        
+    <v-alert class = "mx-auto my-auto" type = "error" v-if = "!isAdmin"> Lo sentimos pero no tienes los privilegios para acceder a esta sección.</v-alert>
+    <v-card class = "py-10" v-if = "isAdmin">
+    
+    <span class = "text-h5">Controles de ronda</span>
+    <div class ="buttons">
+        <v-btn outlined color ="success" class = "mr-2" @click = "nextRound">Siguiente</v-btn>
+        <v-btn outlined color = "error" @click = "decreaseRound">Revertir</v-btn>
     </div>
-    <h5>Número de participantes por jurado: </h5>
-    <b-button @click = "assignParticipants" pill variant = "primary">Asignar participantes</b-button>
-    <b-card v-for = "juror in jurors" :header = "juror.name+' '+juror.lastName">
-        <h5>Upb id: {{juror.upb_id}}</h5>
-        <div class = "participants-container">
-            <b-button v-for = "participant in juror.participants">{{participant.name}}</b-button>
-        </div>
+    <div>
+    <v-chip outlined class = "mt-5 font-bold-weight" label color = "primary">Ronda actual: {{round}}</v-chip>
+    </div>
+    <v-btn  depressed color = "success" class = "mt-5" @click = "assignParticipants"><v-icon left>mdi-account-group</v-icon>Asignar participantes</v-btn>
+    <div>
+    <div>
+    <a download = "resultados.xlsx" href = "https://www.concursoupb.com/api/report"><v-btn class = "mt-2 green lighten-4" ><v-icon left>mdi-file-excel</v-icon>Generar reporte en excel</v-btn></a>
+    </div>
+    <v-btn color = "primary" class = "mt-2" @click = "dialog = true"><v-icon left>mdi-list-box</v-icon>Registrar participantes</v-btn>
+    <v-dialog 
+    persistent
+    max-width = "600px"
+    v-model = "dialog"
+    > 
+        <v-card>
+            <v-card-title><span class = "text-h5">Registro de participantes</span></v-card-title>
+            <v-card-text>
+                Ingresa el archivo de excel que contiene la información de los participantes a registrar
+                <v-file-input
+                chips
+                label = "Archivo de excel"
+                v-model = "currentFile"
+                >
 
-    </b-card>
+                </v-file-input>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn @click = "handleFile">Subir</v-btn>
+                <v-btn
+                @click = "dialog = false"
+                >Cerrar</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-snackbar color = "success" v-if = "this.message == 'success'" v-model = "alert"><v-icon left>mdi-account-group</v-icon>Se registaron {{ registeredUsers }} participantes de forma exitosa. </v-snackbar>
+    </div>
+    <v-data-table
+    :headers = "headers"
+    :items = "participants"
+    item-key = "name"
+    :search = "search">
+    <template v-slot:top>
+        
+        <v-text-field
+          v-model="search"
+          label="Ingrese un nombre"
+          class="my-4 px-5"
+          flat
+          prepend-icon = "mdi-account"
+        ></v-text-field>
+    </template>
+    <template v-slot:item.name = "{item}">
+
+        <router-link :to="{name : 'DetailedView' ,params: { id: item['_id']['$oid']}}">
+   
+            {{ item.name }}
+        </router-link>
+       
+    </template>
+    <template v-slot:item.wrongQuestions="{item}">
+        <v-chip class = "mx-auto" 
+            dark
+            :color = "getColor(item.wrongQuestions)" >
+            {{ item.wrongQuestions }}
+        </v-chip>
+    </template>
+
+    </v-data-table>
+    </v-card>
+   
     </div>
 
 
@@ -39,30 +101,60 @@ export default{
     
     computed:{
         ...mapState(userData,['round']),
+        ...mapState(userData,['isAdmin'])
 
     },
     mounted(){
+
+        if(this.isAdmin){
+            this.$socket.emit("admin")
+        }
         LoginService.jurorsParticipants().then((response => {
             this.jurors = response.data
+            
+        }))
+
+        LoginService.participantsList().then((response => {
+            this.participants = response.data
         }))
         
 
     },
     data(){
         return {
-        jurors: []
+        jurors: [],
+        dialog: false,
+        currentFile: '',
+        registeredUsers: 0,
+        status: '',
+        alert: false,
+        message: '',
+        participants:  [],
+        search: '',
+        headers: [
+            {
+                text: 'Id',
+                align: 'start',
+                sortable: true,
+                value: 'row_id'
+            },
+            {'text':'Nombres', value: 'name'},
+            {'text': 'Seccional',value: 'seccional'},
+            {'text':'Respuestas incorrectas',value: 'wrongQuestions'},
+            {'text':'ID UPB',value: 'upb_id'}
+
+        ]
         }
+        
+        
     },
     methods:{
         assignParticipants(){
             LoginService.assign().then((response => {
-                this.$bvToast.toast(`Participantes asignados exitosamente`,{
-                    title: 'Notificación',
-                    variant: 'success',
-                    solid: true,
-                })
+                
                 LoginService.jurorsParticipants().then((response => {
-            this.jurors = response.data
+                this.jurors = response.data
+                console.log(this.jurors)
         }))
 
             }))
@@ -71,14 +163,43 @@ export default{
         nextRound(){
             let store = userData()
             store.increaseRound()
+            console.log(store)
             
         },
         decreaseRound(){
             let store = userData()
             store.decreaseRound()
         },
+        handleFile(){
+            if (this.currentFile){
+                LoginService.sendFile(this.currentFile).then((response => {
+                    let data = response.data.data
+                    this.registeredUsers = data.registered_users
+                    this.message = "success"
+                    this.alert = true
+
+                    LoginService.participantsList.then((response => {
+                        this.participants = response.data
+                    }))
+                    
+                }))
+            }
+
+        },
+        getColor(value){
+            if( value == 3) return 'red'
+            else if(value == 2) return 'orange'
+            else return 'green'
+
+        },
+
         
 
+    },
+    sockets:{
+        results(data){
+            this.participants = data
+        }
     }
 }
 </script>

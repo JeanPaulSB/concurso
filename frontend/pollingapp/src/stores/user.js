@@ -16,6 +16,7 @@ export const userData  = defineStore('user',{
             this.id = obj.id
             this.email = obj.email
             this.isAuthenticated = true
+            this.isAdmin = obj.isAdmin
         },
         increaseRound(){
             this.round+=1;

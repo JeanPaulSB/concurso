@@ -1,45 +1,35 @@
 <template>
-    <div class="participants-container">
-        <h1>Participantes activos</h1>
-        <b-badge pill variant = "success">Ronda {{round}}</b-badge>
-        <b-card>
-            <b-card v-for="elem in this.activeParticipants"
-            border-variant = "primary"
-            :header = 'elem["_id"]["$oid"]'
-            header-bg-variant = "primary"
-            header-text-variant = "white"
-            align = "center"
-            class = "mt-5" 
+    <div>
             
-            >
-            <b-card-text>Nombre: {{ elem["name"] }} {{ elem["lastName"] }}</br>
-            Respuestas incorrectas: {{ elem["questions_failed"] }} </br>
-            <b-button class = "mt-2" variant = "danger" @click="downvote(elem['_id']['$oid'])">❌</b-button>
-            
-            </b-card-text>
                 
-            </b-card>
-        </b-card>
+                <v-chip outlined color = "success"><v-icon left>mdi-account-check</v-icon>Participantes activos</v-chip>
+                <Participant class = "mt-5 font-bold-weight" v-for = "elem in this.activeParticipants" 
+                :name ="elem.name" 
+                city = 'Medellin'
+                :wrongQuestions = "elem.wrongQuestions" 
+                :id = "elem['_id']['$oid']" 
+                :lastName = "elem['lastName']"
+                :active = true
+                :round = 1
+                >
 
-        <h2>Participantes descalificados</h2>
+                </Participant>
 
-          <b-card>
-            <b-card v-for="elem in this.desqualifiedParticipants"
-            border-variant = "primary"
-            :header = 'elem["_id"]["$oid"]'
-            header-bg-variant = "primary"
-            header-text-variant = "white"
-            align = "center"
-            class = "mt-5" 
-            
+        <v-divider></v-divider>
+        <v-chip outlined color = "error"><v-icon left>mdi-cancel</v-icon>Participantes descalificados</v-chip>
+        <Participant class = "mt-5" v-for = "elem in this.desqualifiedParticipants"
+            :name ="elem.name" 
+            city = 'Medellin'
+            :wrongQuestions = "elem.wrongQuestions" 
+            :id = "elem['_id']['$oid']" 
+            :active = false
+            :round = 1
             >
-            <b-card-text>Nombre: {{ elem["name"] }} {{ elem["lastName"] }}</br>
-            Respuestas incorrectas: {{ elem["questions_failed"] }} </br>
-            
-            </b-card-text>
-                
-            </b-card>
-        </b-card>
+
+        </Participant>
+
+
+
     
     </div>
 </template>
@@ -47,18 +37,12 @@
 
 import LoginService  from '@/services/LoginService';
 import {userData} from '../stores/user'
-import {BCard,BCardText,BTable,BButton,BCardGroup,BBadge,BToast} from 'bootstrap-vue'
 import {mapState} from 'pinia'
+import Participant from '@/components/Participant.vue';
 export default{
     name: "Participants",
     components:{
-        BCard,
-        BCardText,
-        BTable,
-        BButton,
-        BCardGroup,
-        BBadge,
-        BToast,
+        Participant
     },
     data(){
         return {
@@ -71,11 +55,12 @@ export default{
     computed: {
         // getting active participants
         activeParticipants(){
-            return this.participants.filter( obj => obj.questions_failed < 3)
+
+            return this.participants.filter( obj => obj.wrongQuestions < 3)
             
         },
         desqualifiedParticipants(){
-            return this.participants.filter(obj => obj.questions_failed >= 3)
+            return this.participants.filter(obj => obj.wrongQuestions >= 3)
         },
         ...mapState(userData,['round'])
 
@@ -140,19 +125,6 @@ export default{
 
 </script>
 <style>
-.participants-container{
-    display:flex;
-    width: 100vw;
-    flex-direction: column;
-    gap: 50px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 50px;
-}
-.individual-participant{
-    display: flex;
-    gap: 50px;
-}
 
 
 </style>

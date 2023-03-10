@@ -9,6 +9,7 @@ import VueCompositionAPI from '@vue/composition-api'
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import vuetify from './plugins/vuetify'
 
 Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
@@ -31,5 +32,6 @@ Vue.use(new VueSocketIO({
 new Vue({
   router,
   pinia,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

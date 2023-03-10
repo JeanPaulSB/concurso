@@ -126,3 +126,8 @@ class JurorsParticipants(Resource):
             
         return json.loads(json_util.dumps(jurors))
 
+class JurorByParticipant(Resource):
+    def post(self):
+        participant_id = request.form["participant_id"]
+        
+        return json.loads(json_util.dumps(getJuror(participant_id)))

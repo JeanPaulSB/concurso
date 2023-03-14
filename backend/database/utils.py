@@ -65,6 +65,11 @@ def getHistory(juror_id: int) -> list:
     records = list(collection.find({'juror':juror_id}))
     return records
 
+def getParticipantsHistory(participant_id: str) -> list:
+    collection = db.history
+    records = list(collection.find({'_id':ObjectId(participant_id)}))
+    return records
+
 """
 Function that returns a Juror for the corresponding partcipant
 """

@@ -9,7 +9,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 # importing resources
 from resources.jurors import Register,Juror,Jurors,Login,History,Revert,JurorsParticipants,JurorByParticipant
-from resources.participants import LoadParticipants,Assign,Participants,Participant,GenerateReport
+from resources.participants import LoadParticipants,Assign,Participants,Participant,GenerateReport,ParticipantHistory
 from database.db import client
 from database.utils import getParticipants,downvoteParticipant,recordTransaction
 
@@ -50,6 +50,7 @@ api.add_resource(LoadParticipants,"/api/participants/register")
 api.add_resource(Assign,"/api/participants/assign")
 api.add_resource(Participants,"/api/participants/list")
 api.add_resource(Participant,"/api/participant/<participant_id>")
+api.add_resource(ParticipantHistory,"/api/participant/history")
 api.add_resource(GenerateReport,"/api/report")
 
 rooms = []

@@ -10,6 +10,9 @@
             <p><v-icon>mdi-account</v-icon>{{juror_email}}</p>
             <p><v-icon>mdi-city</v-icon>{{juror_seccional}}</p>
             <p><v-icon>mdi-bookshelf</v-icon>{{juror_upb_id}}</p>
+            <v-divider></v-divider>
+            <v-text class = "h5-text">Historial de votaciones</v-text>
+
         </v-card-text>
 
     </v-card>
@@ -23,6 +26,7 @@ export default{
     name: 'DetailedView',
     props: ['id'],
     setup(props){
+        
         let name = ref('s')
         let row_id = ref(0)
         let wrongQuestions = ref(0)
@@ -34,10 +38,12 @@ export default{
         let juror_seccional = ref('n/a')
 
 
-        console.log("component created")
+
         let participant_id = props.id
+
         LoginService.participant(participant_id).then((response =>{
             let data = response.data
+            console.log(data)
             name.value = data['name']
             upb_id.value = data['upb_id']
             row_id.value = data['row_id']
@@ -52,6 +58,8 @@ export default{
             juror_upb_id.value = data['upb_id']
             juror_seccional.value = data['seccional']
         }))
+
+
 
         return {
             name,

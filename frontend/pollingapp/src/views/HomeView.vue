@@ -1,8 +1,14 @@
 <template>
   <div>
-    <v-card>
-      <v-card-title>Bienvenido </v-card-title>
-      <v-card-text></v-card-text>
+    <v-card class = "mx-auto">
+      <v-card-text class = "font-weight-bold">
+        <h1>{{name}}</h1>
+        <p><v-icon>mdi-account</v-icon>Nombre: {{name}}</p>
+        <p><v-icon>mdi-account</v-icon>Email: {{email}}</p>
+        <p><v-icon>mdi-bookshelf</v-icon>UPB id: {{upbid}}</p>
+        <p><v-icon>mdi-city</v-icon>Seccional: {{seccional}}</p>
+      </v-card-text>
+
     </v-card>
   </div>
 </template>
@@ -30,6 +36,15 @@
       console.log(store)
       let name = store['name']
       let upbid = store['id']
+      let seccional = store['seccional']
+      let email = store['email']
+
+      return {
+        name,
+        upbid,
+        seccional,
+        email
+      }
       }
      
     }

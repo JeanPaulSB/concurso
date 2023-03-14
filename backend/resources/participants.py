@@ -2,7 +2,7 @@ from flask import Response,request,jsonify,send_from_directory,send_file
 from flask_restful import Resource
 from database.db import client
 from bson import json_util, ObjectId
-from database.utils import getJuror
+from database.utils import getJuror,getParticipantsHistory
 
 
 
@@ -107,7 +107,12 @@ class Participant(Resource):
             return json.loads(json_util.dumps(participant))
         return "bad"
        
-
+class ParticipantHistory(Resource):
+    def post(self):
+        participant_id = request.form['participant_id']
+        records = getParticipantsHistory(participant_id)
+        print(records)
+        return json.loads(json_util.dumps(records))
 
 class GenerateReport(Resource):
     def get(self):

@@ -86,6 +86,8 @@ export default{
                     // successfully logged
                     this.alert = false
                     // updating state
+                    console.log("printing data")
+                    console.log(data)
                     store.loadData(data)
                     this.$router.push("/")
                 }

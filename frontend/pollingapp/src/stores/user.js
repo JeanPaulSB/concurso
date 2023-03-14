@@ -9,6 +9,7 @@ export const userData  = defineStore('user',{
         isAdmin: false,
         isAuthenticated: false,
         round: 0,
+        seccional: '',
     }),
     actions:{
         loadData(obj){
@@ -17,6 +18,7 @@ export const userData  = defineStore('user',{
             this.email = obj.email
             this.isAuthenticated = true
             this.isAdmin = obj.isAdmin
+            this.seccional = obj.seccional
         },
         increaseRound(){
             this.round+=1;
@@ -36,7 +38,8 @@ export const userData  = defineStore('user',{
                 id: state.id,
                 lastName: state.lastName,
                 email: state.email,
-                isAdmin: state.isAdmin
+                isAdmin: state.isAdmin,
+                seccional: state.seccional
             }
         },
         authStatus(state){

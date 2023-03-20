@@ -11,7 +11,15 @@
             <p><v-icon>mdi-city</v-icon>{{juror_seccional}}</p>
             <p><v-icon>mdi-bookshelf</v-icon>{{juror_upb_id}}</p>
             <v-divider></v-divider>
+            
             <v-text class = "h5-text">Historial de votaciones</v-text>
+            
+            <div v-for = "record in history">
+                
+                    <v-chip>{{record.time}}</v-chip>
+                    <v-chip @click = "downvote(record['participant_id'],record['time'])" class = "my-2">Revertir</v-chip>
+            
+            </div>
 
         </v-card-text>
 
@@ -37,6 +45,8 @@ export default{
         let juror_upb_id = ref('n/a')
         let juror_seccional = ref('n/a')
 
+        let history = ref([])
+
 
 
         let participant_id = props.id
@@ -59,10 +69,23 @@ export default{
             juror_seccional.value = data['seccional']
         }))
 
+        LoginService.participantHistory(props.id).then((response =>{
+            let data = response.data
+            history.value = response.data
+            console.log(data)
+        })).catch(error => {
+            console.log(error)
+        })
             
-        LoginService.participantHistory(props.id).then((response => {
-            console.log(response.data)
-        }))
+
+        function downvote(id,time){
+            console.log("something wrong")
+            LoginService.revert(id,time).then((response =>{
+                console.log(response.data)
+                window.location.reload()
+            }))
+        }
+        
 
 
 
@@ -74,7 +97,9 @@ export default{
             seccional,
             juror_email,
             juror_seccional,
-            juror_upb_id
+            juror_upb_id,
+            history,
+            downvote
         }
     }
 }

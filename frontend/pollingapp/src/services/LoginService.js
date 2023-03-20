@@ -41,9 +41,11 @@ export default{
         form.append('upb_id',id)
         return apiClient.post("/jurors/history",form)
     },
-    revert(id){
+    revert(id,time){
         let form = new FormData();
         form.append('participant_id',id)
+        form.append('time',time)
+
         return apiClient.post("/jurors/revert",form)
     },
     assign(){
@@ -73,6 +75,6 @@ export default{
     participantHistory(participant_id){
         let form = new FormData();
         form.append('participant_id',participant_id)
-        return apiClient.post("/participant/history")
+        return apiClient.post("/participant/history",form)
     }
 }

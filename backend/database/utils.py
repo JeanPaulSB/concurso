@@ -38,7 +38,7 @@ def downvoteParticipant(participant_id: str) -> list:
 
 
 
-def revertDowngrade(participant_id: str):
+def revertDowngrade(participant_id: str,time: str):
     collection = db.participants
 
     participant_id = str(participant_id)
@@ -49,6 +49,8 @@ def revertDowngrade(participant_id: str):
     questions_failed = participant['questions_failed']
     questions_failed -= 1
 
+
+    collection.delete_one({'time':time})
     # updating record
     collection.update_one({'_id':ObjectId(participant_id)},{"$set":{"questions_failed": questions_failed}})
 

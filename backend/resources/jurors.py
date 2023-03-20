@@ -112,6 +112,7 @@ class History(Resource):
 class Revert(Resource):
     def post(self):
         participant_id = request.form["participant_id"]
+        time = request.form["time"]
         revertDowngrade(participant_id)
         return 201
 

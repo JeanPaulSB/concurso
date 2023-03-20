@@ -69,5 +69,10 @@ export default{
         form.append('participant_id',participant_id)
         return apiClient.post("/jurors/participant",form)
         
+    },
+    participantHistory(participant_id){
+        let form = new FormData();
+        form.append('participant_id',participant_id)
+        return apiClient.post("/participant/history")
     }
 }

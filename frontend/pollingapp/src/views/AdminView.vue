@@ -108,15 +108,16 @@ export default{
 
         if(this.isAdmin){
             this.$socket.emit("admin")
-        }
-        LoginService.jurorsParticipants().then((response => {
+            LoginService.jurorsParticipants().then((response => {
             this.jurors = response.data
             
-        }))
+            }))
 
-        LoginService.participantsList().then((response => {
+            LoginService.participantsList().then((response => {
             this.participants = response.data
-        }))
+            }))
+        
+            }
         
 
     },

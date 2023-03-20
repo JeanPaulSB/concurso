@@ -69,27 +69,66 @@ class LoadParticipants(Resource):
 
 class Assign(Resource):
     def get(self):
+        # NOTE: the function need to assigns jurors and participant in relationship with its row_id
 
-        # NOTE: MEDELLIN SECCIONAL
+        # since we need to do that for 2 sectionals, we are going to query the jurors of medellin seccional
+        # first with ascending order
+
         # getting participants ids
-        participants = [elem['_id'] for elem in list(collection.find({'seccional':'Medellín'}))]
+        participants = [elem['_id'] for elem in list(collection.find({'seccional':'Medellín'}).sort('row_id',1))]
         # accessing jurors db and getting all the participants as 2d array with chunks of 3 elements
         jurors = db.jurors
         participants = list(chunks(participants,3))
+
+
+        
+
+
+
         
         # listing  jurors
-        jurors_list = list(jurors.find({'seccional':'Medellín'}))
+        # sorting jurors by row id
+        jurors_list = list(jurors.find({'seccional':'Medellín'}).sort('row_id',1))
+
+        
+       
         for juror in jurors_list:
+            i = 0
             # getting random chunk from the main list of participants
             # and assigning it to a juror
             if len(participants) > 0:
-                participants_choice = random.choice(participants)
+                #participants_choice = random.choice(participants)
+                participants_choice = participants[i]
             
                 juror_id = juror['_id']
                 # update the corresponding record
                 jurors.update_one({'_id':juror_id},{"$set":{"participants":participants_choice}})
                 # removing participant from the main list since it was alreayd selected
                 participants.remove(participants_choice)
+
+                i+=1
+
+        # getting bucaramanga jurors
+        jurors_list = list(jurors.find({'seccional':'Bucaramanga'}).sort('row_id',1))
+        participants = [elem['_id'] for elem in list(collection.find({'seccional':'Bucaramanga'}).sort('row_id',1))]
+        participants = list(chunks(participants,3))
+
+        for juror in jurors_list:
+            j = 0
+            if len(participants) > 0:
+                participants_choice = participants[j]
+            
+                juror_id = juror['_id']
+                # update the corresponding record
+                jurors.update_one({'_id':juror_id},{"$set":{"participants":participants_choice}})
+                # removing participant from the main list since it was alreayd selected
+                participants.remove(participants_choice)
+
+                j+=1
+                
+        print(participants)
+
+            
 
         # NOTE: BUCARAMANGA SECCIONAL
 

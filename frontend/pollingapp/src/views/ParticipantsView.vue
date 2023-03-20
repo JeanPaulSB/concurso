@@ -5,12 +5,13 @@
                 <v-chip outlined color = "success"><v-icon left>mdi-account-check</v-icon>Participantes activos</v-chip>
                 <Participant class = "mt-5 font-bold-weight" v-for = "elem in this.activeParticipants" 
                 :name ="elem.name" 
-                city = 'Medellin'
+                :city = "elem['seccional']"
                 :wrongQuestions = "elem.wrongQuestions" 
                 :id = "elem['_id']['$oid']" 
                 :lastName = "elem['lastName']"
                 :active = true
                 :round = 1
+                :key = "elem['_id']['$oid']"
                 >
 
                 </Participant>
@@ -19,11 +20,12 @@
         <v-chip outlined color = "error"><v-icon left>mdi-cancel</v-icon>Participantes descalificados</v-chip>
         <Participant class = "mt-5" v-for = "elem in this.desqualifiedParticipants"
             :name ="elem.name" 
-            city = 'Medellin'
+            :city = "elem['seccional']"
             :wrongQuestions = "elem.wrongQuestions" 
             :id = "elem['_id']['$oid']" 
             :active = false
             :round = 1
+            :key = "elem['_id']['$oid']"
             >
 
         </Participant>

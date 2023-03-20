@@ -67,7 +67,8 @@ def getHistory(juror_id: int) -> list:
 
 def getParticipantsHistory(participant_id: str) -> list:
     collection = db.history
-    records = list(collection.find({'_id':ObjectId(participant_id)}))
+    print(participant_id)
+    records = list(collection.find({'participant_id':participant_id}))
     return records
 
 """

@@ -59,6 +59,11 @@ export default{
             juror_seccional.value = data['seccional']
         }))
 
+            
+        LoginService.participantHistory(props.id).then((response => {
+            console.log(response.data)
+        }))
+
 
 
         return {

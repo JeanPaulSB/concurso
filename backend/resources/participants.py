@@ -19,6 +19,7 @@ collection = db.participants
 class LoadParticipants(Resource):
     def post(self):
         if len(request.files) > 0:
+            collection.delete_many({})
             print("recieving file")
             # validating that the file is actually being sended
             data = request.files['file']

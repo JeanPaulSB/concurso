@@ -46,13 +46,16 @@ def revertDowngrade(participant_id: str,time: str):
     # getting participant
     participant = collection.find_one({'_id':ObjectId(participant_id)})
 
-    questions_failed = participant['questions_failed']
-    questions_failed -= 1
 
+    questions_failed = participant['wrongQuestions']
+    if questions_failed > 0:
+        questions_failed -= 1
 
-    collection.delete_one({'time':time})
+    history_collection = db.history
+    history_collection.delete_one({'time':time})
+    print(time)
     # updating record
-    collection.update_one({'_id':ObjectId(participant_id)},{"$set":{"questions_failed": questions_failed}})
+    collection.update_one({'_id':ObjectId(participant_id)},{"$set":{"wrongQuestions": questions_failed}})
 
 
 def recordTransaction(data: dict):

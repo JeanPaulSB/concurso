@@ -113,7 +113,7 @@ class Revert(Resource):
     def post(self):
         participant_id = request.form["participant_id"]
         time = request.form["time"]
-        revertDowngrade(participant_id)
+        revertDowngrade(participant_id,time)
         return 201
 
 class JurorsParticipants(Resource):

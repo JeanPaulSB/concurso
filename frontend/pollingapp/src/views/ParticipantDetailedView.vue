@@ -16,8 +16,8 @@
             
             <div v-for = "record in history">
                 
-                    <v-chip>{{record.time}}</v-chip>
-                    <v-chip @click = "downvote(record['participant_id'],record['time'])" class = "my-2">Revertir</v-chip>
+                    <v-chip color = "primary" outlined><v-icon left>mdi-clock</v-icon>{{record.time}}</v-chip>
+                    <v-chip color = "error" @click = "revert(record['participant_id'],record['time'])" class = "my-2 ml-2">Revertir</v-chip>
             
             </div>
 
@@ -78,7 +78,7 @@ export default{
         })
             
 
-        function downvote(id,time){
+        function revert(id,time){
             console.log("something wrong")
             LoginService.revert(id,time).then((response =>{
                 console.log(response.data)
@@ -99,7 +99,7 @@ export default{
             juror_seccional,
             juror_upb_id,
             history,
-            downvote
+            revert
         }
     }
 }

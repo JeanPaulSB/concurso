@@ -6,11 +6,13 @@ const apiClient = axios.create({
     headers:{
         Accept: 'application/json',
         "Content-Type": "multipart/form-data",
+        "Authorization": ""
     }
 
 })
 
 export default{
+    apiClient,
     login(email,password){
         let form = new FormData()
         form.append('email',email)
@@ -48,8 +50,11 @@ export default{
 
         return apiClient.post("/jurors/revert",form)
     },
-    assign(){
-        return apiClient.get("/participants/assign")
+    assign(med,bga){
+        let form = new FormData();
+        form.append('med',med)
+        form.append('bga',bga)
+        return apiClient.post("/participants/assign",form)
     },
     jurors(){
         return apiClient.get("/jurors/list")

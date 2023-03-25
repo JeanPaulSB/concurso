@@ -12,7 +12,28 @@
     <div>
     <v-chip outlined class = "mt-5 font-bold-weight" label color = "primary">Ronda actual: {{round}}</v-chip>
     </div>
-    <v-btn  depressed color = "success" class = "mt-5" @click = "assignParticipants"><v-icon left>mdi-account-group</v-icon>Asignar participantes</v-btn>
+    <v-btn  depressed color = "success" class = "mt-5" @click = "assignsettings = true" ><v-icon left>mdi-account-group</v-icon>Asignar participantes</v-btn>
+        <v-dialog
+        v-model = "assignsettings"
+        max-width = "600px"
+        >
+            <v-card>
+            <v-card-title><span class = "text-h5">Ajustes para asignación de participantes</span></v-card-title>
+            <v-card-text>
+                <v-text-field
+                label = "Participantes por jurado Medellín"
+                v-model = "MEDnumber"
+                
+                ></v-text-field>
+                <v-text-field
+                label = "Participantes por jurado Bucaramanga"
+                v-model = "BGAnumber"
+                ></v-text-field>
+                <v-btn color = "success" @click = "assignParticipants">Asignar</v-btn>
+                <v-alert v-show = "error" type = "error">Valores incorrectos</v-alert>
+            </v-card-text>
+            </v-card>
+        </v-dialog>
     <div>
     <div>
     <a download = "resultados.xlsx" href = "https://www.concursoupb.com/api/report"><v-btn class = "mt-2 green lighten-4" ><v-icon left>mdi-file-excel</v-icon>Generar reporte en excel</v-btn></a>
@@ -126,6 +147,10 @@ export default{
         jurors: [],
         dialog: false,
         currentFile: '',
+        MEDnumber: 0,
+        BGAnumber: 0,
+        error: false,
+        assignsettings: false,
         registeredUsers: 0,
         status: '',
         alert: false,
@@ -151,15 +176,21 @@ export default{
     },
     methods:{
         assignParticipants(){
-            LoginService.assign().then((response => {
-                
+            if(this.MEDnumber > 0 && this.BGAnumber > 0){
+            this.error = false
+            LoginService.assign(this.MEDnumber,this.BGAnumber).then((response => {
+                this.assignsettings = false
                 LoginService.jurorsParticipants().then((response => {
                 this.jurors = response.data
                 console.log(this.jurors)
         }))
 
             }))
-
+        }
+        else{
+            console.log("wrong values")
+            this.error = true
+        }
         },
         nextRound(){
             let store = userData()

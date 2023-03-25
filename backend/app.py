@@ -6,6 +6,11 @@ from bson import ObjectId,json_util
 from threading import Lock
 from werkzeug.middleware.proxy_fix import ProxyFix
 
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
 
 # importing resources
 from resources.jurors import Register,Juror,Jurors,Login,History,Revert,JurorsParticipants,JurorByParticipant
@@ -21,6 +26,10 @@ app = Flask(__name__)
 api = Api(app)
 app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
+
+
+jwt = JWTManager(app)
+
 
 
 socketio = SocketIO(app,logger = True,engineio_logger = True, async_mode = "gevent",cors_allowed_origins = '*')

@@ -44,6 +44,7 @@
 <script>
 import { BForm,BFormInput,BFormGroup,BButton,BAlert} from 'bootstrap-vue';
 import LoginService from '@/services/LoginService.js'
+import apiClient from '@/services/LoginService.js'
 import {userData} from '../stores/user'
 
 const store = userData()
@@ -87,7 +88,9 @@ export default{
                     this.alert = false
                     // updating state
                     console.log("printing data")
+
                     console.log(data)
+                    
                     store.loadData(data)
                     this.$router.push("/")
                 }

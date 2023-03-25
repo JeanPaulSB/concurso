@@ -4,6 +4,12 @@ from database.db import client
 from database.utils import *
 from bson import json_util, ObjectId
 
+
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
 import json
 import pandas as pd
 db = client.Users
@@ -11,6 +17,7 @@ collection = db.jurors
 
 class Register(Resource):
     # registering a juror
+    @jwt_required()
     def post(self):
 
         obj = {}
@@ -50,7 +57,7 @@ class Register(Resource):
     
 class Juror(Resource):
     
-    
+    @jwt_required()
     def get(self,upb):
         # returns all the jurors
         juror = list(collection.find({'upb_id':upb}))
@@ -58,6 +65,7 @@ class Juror(Resource):
         return json.loads(json_util.dumps(juror))
 
 class Jurors(Resource):
+    @jwt_required()
     def get(self):
         jurors = list(collection.find({}))
         return json.loads(json_util.dumps(jurors))
@@ -72,6 +80,7 @@ class Login(Resource):
         if juror:
             # checking if the indicated password matches the required one
             if juror[0]["password"] == password:
+                access_token = create_access_token(identity = email)
                 return Response(
                     response = json.dumps({"data":{
                         "message":"success",
@@ -79,7 +88,8 @@ class Login(Resource):
                         "email":juror[0]["email"],
                         "id":juror[0]["upb_id"],
                         "isAdmin":juror[0]['isAdmin'],
-                        "seccional": juror[0]["seccional"]
+                        "seccional": juror[0]["seccional"],
+                        "access_token": access_token
                     }}),
                     status = 201,
                     mimetype = "application/json"
@@ -105,6 +115,7 @@ class Login(Resource):
         print(juror)
 
 class History(Resource):
+    @jwt_required()
     def post(self):
         # TODO: add exceptions
         upb_id = int(request.form["upb_id"])
@@ -112,6 +123,7 @@ class History(Resource):
         return json.loads(json_util.dumps(records))
 
 class Revert(Resource):
+    @jwt_required()
     def post(self):
         participant_id = request.form["participant_id"]
         time = request.form["time"]
@@ -119,6 +131,7 @@ class Revert(Resource):
         return 201
 
 class JurorsParticipants(Resource):
+    @jwt_required()
     def get(self):
         jurors = list(collection.find({}))
         
@@ -131,6 +144,7 @@ class JurorsParticipants(Resource):
         return json.loads(json_util.dumps(jurors))
 
 class JurorByParticipant(Resource):
+    @jwt_required()
     def post(self):
         participant_id = request.form["participant_id"]
         

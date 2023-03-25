@@ -21,6 +21,7 @@ class Register(Resource):
         email = request.form["email"]
         upb_id = request.form["upb_id"]
         password = request.form["password"]
+        row_id = request.form["row_id"]
 
 
         obj["name"] = name
@@ -29,6 +30,7 @@ class Register(Resource):
         obj["participants"] = []
         obj["upb_id"] = upb_id
         obj["password"] = password
+        obj["row_id"] = row_id
         
         # checking if user is already registered
         jurors = collection.find_one({'email':email})

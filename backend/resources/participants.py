@@ -79,7 +79,7 @@ class Assign(Resource):
         participants = [elem['_id'] for elem in list(collection.find({'seccional':'Medellín'}).sort('row_id',1))]
         # accessing jurors db and getting all the participants as 2d array with chunks of 3 elements
         jurors = db.jurors
-        participants = list(chunks(participants,3))
+        participants = list(chunks(participants,20))
 
 
         
@@ -89,7 +89,7 @@ class Assign(Resource):
         
         # listing  jurors
         # sorting jurors by row id
-        jurors_list = list(jurors.find({'seccional':'Medellín'}).sort('row_id',1))
+        jurors_list = list(jurors.find({'seccional':'Medellín','isAdmin':False}).sort('row_id',1))
 
         
        

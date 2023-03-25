@@ -141,6 +141,10 @@ export default{
         jurors: [],
         dialog: false,
         currentFile: '',
+        MEDnumber: 0,
+        BGAnumber: 0,
+        error: false,
+        assignsettings: false,
         registeredUsers: 0,
         settings: false,
         MEDnumber: 0,
@@ -177,8 +181,9 @@ export default{
         }))
 
             }))
-
-        },
+        }
+        
+        ,
         nextRound(){
             let store = userData()
             store.increaseRound()

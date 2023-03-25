@@ -4,7 +4,6 @@
             <p><v-icon>mdi-account</v-icon>{{name}}</p>
             <p><v-icon>mdi-bookshelf</v-icon>Respuestas incorrectas: {{wrongQuestions}}</p>
             <p><v-icon>mdi-city</v-icon>{{city}}</p>
-            <p>id: {{id}}</p>
         </v-card-text>
         <v-card-actions>
             <v-btn

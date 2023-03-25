@@ -6,11 +6,13 @@ const apiClient = axios.create({
     headers:{
         Accept: 'application/json',
         "Content-Type": "multipart/form-data",
+        "Authorization": ""
     }
 
 })
 
 export default{
+    apiClient,
     login(email,password){
         let form = new FormData()
         form.append('email',email)

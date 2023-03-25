@@ -82,7 +82,14 @@ export default{
             console.log("something wrong")
             LoginService.revert(id,time).then((response =>{
                 console.log(response.data)
-                window.location.reload()
+                    LoginService.participantHistory(props.id).then((response =>{
+                let data = response.data
+                history.value = response.data
+                console.log(data)
+            })).catch(error => {
+                console.log(error)
+            })
+            
             }))
         }
         

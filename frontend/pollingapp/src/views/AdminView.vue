@@ -12,7 +12,22 @@
     <div>
     <v-chip outlined class = "mt-5 font-bold-weight" label color = "primary">Ronda actual: {{round}}</v-chip>
     </div>
-    <v-btn  depressed color = "success" class = "mt-5" @click = "assignParticipants"><v-icon left>mdi-account-group</v-icon>Asignar participantes</v-btn>
+    <v-btn  depressed color = "success" class = "mt-5" @click = "settings = true"><v-icon left>mdi-account-group</v-icon>Asignar participantes</v-btn>
+    <v-dialog
+    width = "500"
+    v-model = "settings">
+
+    <v-card>
+        <v-card-title>Ajustes</v-card-title>
+        <v-card-text>
+        <v-text-field v-model = "MEDnumber" label = "Participantes por jurado Medellín"></v-text-field>
+        <v-text-field v-model = "BGAnumber" label = "Participantes por jurado Bucaramanga"></v-text-field>
+        <v-btn color = "success" @click = "assignParticipants()">Asignar</v-btn>
+    </v-card-text>
+    </v-card>
+
+
+    </v-dialog>
     <div>
     <div>
     <a download = "resultados.xlsx" href = "https://www.concursoupb.com/api/report"><v-btn class = "mt-2 green lighten-4" ><v-icon left>mdi-file-excel</v-icon>Generar reporte en excel</v-btn></a>
@@ -127,6 +142,9 @@ export default{
         dialog: false,
         currentFile: '',
         registeredUsers: 0,
+        settings: false,
+        MEDnumber: 0,
+        BGAnumber: 0,
         status: '',
         alert: false,
         message: '',
@@ -151,8 +169,8 @@ export default{
     },
     methods:{
         assignParticipants(){
-            LoginService.assign().then((response => {
-                
+            LoginService.assign(this.MEDnumber,this.BGAnumber).then((response => {
+                this.settings = false;
                 LoginService.jurorsParticipants().then((response => {
                 this.jurors = response.data
                 console.log(this.jurors)

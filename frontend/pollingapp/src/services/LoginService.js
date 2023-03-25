@@ -48,8 +48,12 @@ export default{
 
         return apiClient.post("/jurors/revert",form)
     },
-    assign(){
-        return apiClient.get("/participants/assign")
+    assign(med,bga){
+        let form = new FormData()
+
+        form.append("med",med)
+        form.append("bga",bga)
+        return apiClient.post("/participants/assign",form)
     },
     jurors(){
         return apiClient.get("/jurors/list")

@@ -6,10 +6,6 @@ from bson import ObjectId,json_util
 from threading import Lock
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
 
 
 # importing resources
@@ -28,7 +24,7 @@ app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
 
 
-jwt = JWTManager(app)
+
 
 
 

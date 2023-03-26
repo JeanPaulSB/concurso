@@ -4,10 +4,6 @@ from database.db import client
 from bson import json_util, ObjectId
 from database.utils import getJuror,getParticipantsHistory
 
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
 
 import random
 import json
@@ -20,7 +16,7 @@ db = client.Users
 collection = db.participants
 
 class LoadParticipants(Resource):
-    @jwt_required()
+
     def post(self):
         if len(request.files) > 0:
             collection.delete_many({})
@@ -73,7 +69,7 @@ class LoadParticipants(Resource):
             
 
 class Assign(Resource):
-    @jwt_required()
+    
     def post(self):
 
         try:
@@ -146,13 +142,13 @@ class Assign(Resource):
 
 
 class Participants(Resource):
-    @jwt_required()
+    
     def get(self):
         participants = list(collection.find({}))
         return json.loads(json_util.dumps(participants))
 
 class Participant(Resource):
-    @jwt_required()
+
     def get(self,participant_id):
         
         participant = collection.find_one({'_id': ObjectId(participant_id)})
@@ -161,7 +157,7 @@ class Participant(Resource):
         return "bad"
        
 class ParticipantHistory(Resource):
-    @jwt_required()
+
     def post(self):
         participant_id = request.form['participant_id']
         records = getParticipantsHistory(participant_id)
@@ -169,7 +165,7 @@ class ParticipantHistory(Resource):
         return json.loads(json_util.dumps(records))
 
 class GenerateReport(Resource):
-    @jwt_required()
+    
     def get(self):
         participants = list(collection.find({}))
         new_participants = []

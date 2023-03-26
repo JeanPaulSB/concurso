@@ -77,7 +77,7 @@ class Login(Resource):
         if juror:
             # checking if the indicated password matches the required one
             if juror[0]["password"] == password:
-                access_token = create_access_token(identity = email)
+                
                 return Response(
                     response = json.dumps({"data":{
                         "message":"success",
